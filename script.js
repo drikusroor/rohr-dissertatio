@@ -36,6 +36,14 @@
 // Toggle Latin originals
 // ═══════════════════════════════════════════════
 function toggleLatin(btn, showLabel, hideLabel) {
+  // Remove initial .hidden class from all latin-original elements on first toggle
+  var els = document.querySelectorAll('.latin-original.hidden');
+  if (els.length > 0) {
+    els.forEach(function (el) { el.classList.remove('hidden'); });
+    btn.textContent = hideLabel;
+    return;
+  }
+  // Subsequently, toggle via body class
   document.body.classList.toggle('hide-latin');
   btn.textContent = document.body.classList.contains('hide-latin') ? showLabel : hideLabel;
 }
