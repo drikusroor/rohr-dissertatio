@@ -321,10 +321,7 @@ header {
 }
 
 .scroll-hint {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-top: 3rem;
   animation: float 3s ease-in-out infinite;
   color: var(--text-dim);
   font-size: 0.85rem;
@@ -333,8 +330,8 @@ header {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(8px); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
 }
 
 /* ─── MAIN CONTENT ─── */
