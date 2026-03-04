@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>De Masticatione Mortuorum — Philippus Rohr (1679)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+    :root {
+      --bg: #0a0a0c;
+      --bg-card: #111115;
+      --bg-card-hover: #16161c;
+      --text: #e8e4df;
+      --text-muted: #9a938a;
+      --text-dim: #6b655d;
+      --accent: #c4a265;
+      --accent-dim: #8a7242;
+      --red: #8b3a3a;
+      --red-light: #b85454;
+      --border: #2a2520;
+      --border-light: #3d362e;
+      --nav-bg: rgba(10, 10, 12, 0.92);
+      --switcher-bg: rgba(10, 10, 12, 0.9);
+      --accent-tint: rgba(196, 162, 101, 0.15);
+      --accent-tint-subtle: rgba(196, 162, 101, 0.1);
+      --accent-tint-faint: rgba(196, 162, 101, 0.05);
+      --accent-tint-superlight: rgba(196, 162, 101, 0.04);
+      --hero-red-glow: rgba(139, 58, 58, 0.15);
+      --hero-gold-glow: rgba(196, 162, 101, 0.08);
+    }
+
+    body.light-mode {
+      --bg: #f5f1eb;
+      --bg-card: #ffffff;
+      --bg-card-hover: #faf8f5;
+      --text: #2c2520;
+      --text-muted: #5c5348;
+      --text-dim: #8a8078;
+      --accent: #96742e;
+      --accent-dim: #7a5f28;
+      --red: #8b3a3a;
+      --red-light: #a04444;
+      --border: #ddd5ca;
+      --border-light: #c8bfb2;
+      --nav-bg: rgba(245, 241, 235, 0.95);
+      --switcher-bg: rgba(245, 241, 235, 0.95);
+      --accent-tint: rgba(150, 116, 46, 0.12);
+      --accent-tint-subtle: rgba(150, 116, 46, 0.08);
+      --accent-tint-faint: rgba(150, 116, 46, 0.05);
+      --accent-tint-superlight: rgba(150, 116, 46, 0.03);
+      --hero-red-glow: rgba(139, 58, 58, 0.07);
+      --hero-gold-glow: rgba(196, 162, 101, 0.05);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 18px;
+    }
+
+    /* ─── TOP CONTROLS ─── */
+    .top-controls {
+      position: fixed;
+      top: 1rem;
+      right: 1.5rem;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .theme-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      border: 1px solid var(--border-light);
+      background: var(--switcher-bg);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      padding: 0;
+    }
+
+    .theme-btn:hover {
+      border-color: var(--accent-dim);
+      background: var(--accent-tint-subtle);
+    }
+
+    .theme-icon {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .lang-switcher {
+      display: flex;
+      gap: 0;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      background: var(--switcher-bg);
+      backdrop-filter: blur(10px);
+    }
+
+    .lang-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.45rem 0.9rem;
+      border: none;
+      background: transparent;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .lang-btn:not(:last-child) {
+      border-right: 1px solid var(--border);
+    }
+
+    .lang-btn:hover { color: var(--text-muted); }
+
+    .lang-btn.active {
+      background: var(--accent-tint);
+      color: var(--accent);
+    }
+
+    .lang-btn .flag {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    /* Language visibility */
+    [data-lang="nl"] { display: none; }
+    body.lang-nl [data-lang="nl"] { display: revert; }
+    body.lang-nl [data-lang="en"] { display: none; }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 0%, var(--hero-red-glow) 0%, transparent 60%),
+        radial-gradient(ellipse at 50% 100%, var(--hero-gold-glow) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-ornament {
+      font-size: 2rem;
+      color: var(--accent-dim);
+      letter-spacing: 0.5em;
+      margin-bottom: 2rem;
+      opacity: 0.6;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h1 em { font-style: italic; color: var(--accent); }
+
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      color: var(--text-muted);
+      font-weight: 300;
+      margin-top: 1rem;
+      letter-spacing: 0.08em;
+    }
+
+    .hero-meta {
+      margin-top: 2.5rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .hero-meta span { color: var(--accent-dim); }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: float 3s ease-in-out infinite;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      font-family: 'Inter', sans-serif;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ─── NAV ─── */
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.8rem 2rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .sticky-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.3s;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid transparent;
+    }
+
+    .sticky-nav a:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent-dim);
+    }
+
+    /* ─── LAYOUT ─── */
+    .container { max-width: 800px; margin: 0 auto; padding: 0 2rem; }
+
+    section {
+      padding: 5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section:last-of-type { border-bottom: none; }
+
+    .section-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-dim);
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 400;
+      margin-bottom: 2rem;
+      line-height: 1.25;
+    }
+
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--accent);
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 2.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    p { margin-bottom: 1.2rem; }
+
+    /* ─── CONTEXT CARDS ─── */
+    .context-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .context-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.8rem;
+      transition: all 0.3s;
+    }
+
+    .context-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-light);
+    }
+
+    .context-card .card-icon { font-size: 1.6rem; margin-bottom: 0.8rem; }
+
+    .context-card .card-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.3rem;
+    }
+
+    .context-card .card-value { font-size: 1.15rem; font-weight: 500; color: var(--text); }
+
+    .context-card .card-note {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.4rem;
+      line-height: 1.5;
+    }
+
+    /* ─── FINDINGS ─── */
+    .finding {
+      background: var(--bg-card);
+      border-left: 3px solid var(--red);
+      border-radius: 0 8px 8px 0;
+      padding: 1.5rem 2rem;
+      margin: 1.5rem 0;
+    }
+
+    .finding .finding-num {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--red-light);
+      margin-bottom: 0.3rem;
+    }
+
+    .finding p { margin-bottom: 0; font-size: 1.05rem; }
+
+    /* ─── TRANSLATION ─── */
+    .translation-block {
+      margin: 2.5rem 0;
+      padding: 2rem 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .translation-block:first-of-type { border-top: none; }
+
+    .thesis-marker {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-tint-subtle);
+      border: 1px solid var(--accent-tint);
+      padding: 0.2rem 0.8rem;
+      border-radius: 3px;
+      margin-bottom: 1rem;
+    }
+
+    .latin-original {
+      font-style: italic;
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+      border-left: 2px solid var(--border);
+    }
+
+    .translation-text {
+      color: var(--text);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .translation-note {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-top: 0.8rem;
+      padding: 0.8rem 1rem;
+      background: var(--accent-tint-faint);
+      border-radius: 4px;
+      line-height: 1.6;
+    }
+
+    .verse {
+      font-style: italic;
+      margin: 1rem 0;
+      padding-left: 2rem;
+      color: var(--accent);
+      line-height: 1.9;
+    }
+
+    /* ─── ANALYSIS ─── */
+    .argument-map { display: grid; gap: 1.5rem; margin: 2rem 0; }
+
+    .argument-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .argument-item::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--red), var(--accent-dim));
+    }
+
+    .argument-item h4 { margin-top: 0; color: var(--accent); font-size: 0.9rem; }
+    .argument-item p { font-size: 1rem; color: var(--text-muted); }
+
+    /* ─── TIMELINE ─── */
+    .timeline { position: relative; margin: 2rem 0; padding-left: 2rem; }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: var(--border-light);
+    }
+
+    .timeline-item { position: relative; margin-bottom: 2rem; padding-left: 1.5rem; }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.35rem; top: 0.45rem;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      border: 2px solid var(--bg);
+    }
+
+    .timeline-date {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--accent-dim);
+      font-weight: 600;
+    }
+
+    .timeline-text { font-size: 1rem; color: var(--text-muted); margin-top: 0.3rem; }
+
+    blockquote {
+      border-left: 3px solid var(--accent-dim);
+      padding: 1rem 1.5rem;
+      margin: 1.5rem 0;
+      font-style: italic;
+      color: var(--text-muted);
+      background: var(--accent-tint-superlight);
+      border-radius: 0 6px 6px 0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+      line-height: 1.8;
+      border-top: 1px solid var(--border);
+    }
+
+    footer a { color: var(--accent-dim); text-decoration: none; }
+
+    .toggle-latin {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: var(--accent-dim);
+      background: none;
+      border: 1px solid var(--accent-dim);
+      padding: 0.4rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 2rem;
+    }
+    .toggle-latin:hover { background: var(--accent-tint-subtle); color: var(--accent); }
+    body.hide-latin .latin-original { display: none; }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 600px) {
+      .context-grid { grid-template-columns: 1fr; }
+      .sticky-nav { gap: 1rem; font-size: 0.65rem; padding: 0.6rem 1rem; }
+      section { padding: 3rem 0; }
+      .container { padding: 0 1.2rem; }
+      .top-controls { top: 0.5rem; right: 0.5rem; }
+      .lang-btn { padding: 0.35rem 0.6rem; font-size: 0.65rem; }
+      .theme-btn { width: 32px; height: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════ CONTROLS ═══════════════════ -->
+<div class="top-controls">
+  <button class="theme-btn" onclick="toggleTheme()" id="theme-toggle" title="Toggle light/dark mode">
+    <span class="theme-icon" id="theme-icon">☀️</span>
+  </button>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('en')" id="btn-en">
+      <span class="flag">&#127468;&#127463;</span> EN
+    </button>
+    <button class="lang-btn" onclick="setLang('nl')" id="btn-nl">
+      <span class="flag">&#127475;&#127473;</span> NL
+    </button>
+  </div>
+</div>
+
+<!-- ════════════════════════════ HERO ════════════════════════════ -->
+<header class="hero">
+  <div class="hero-ornament">— ✦ —</div>
+  <h1><em>De Masticatione<br>Mortuorum</em></h1>
+
+  <p class="hero-subtitle" data-lang="en">On the Chewing of the Dead</p>
+  <p class="hero-subtitle" data-lang="nl">Over het Kauwen der Doden</p>
+
+  <div data-lang="en">
+    <p class="hero-meta">
+      A Dissertation by <span>M. Philippus Rohr</span> &amp; <span>Benjamin Frizschius</span><br>
+      University of Leipzig · 16 August 1679
+    </p>
+  </div>
+  <div data-lang="nl">
+    <p class="hero-meta">
+      Een dissertatie door <span>M. Philippus Rohr</span> &amp; <span>Benjamin Frizschius</span><br>
+      Universiteit van Leipzig · 16 augustus 1679
+    </p>
+  </div>
+
+  <div class="scroll-hint" data-lang="en">↓ Scroll to explore ↓</div>
+  <div class="scroll-hint" data-lang="nl">↓ Scroll om te ontdekken ↓</div>
+</header>
+
+<!-- ════════════════════════════ NAV ════════════════════════════ -->
+<nav class="sticky-nav">
+  <a href="#context"><span data-lang="en">Context</span><span data-lang="nl">Context</span></a>
+  <a href="#summary"><span data-lang="en">Summary</span><span data-lang="nl">Samenvatting</span></a>
+  <a href="#translation"><span data-lang="en">Full Translation</span><span data-lang="nl">Volledige Vertaling</span></a>
+  <a href="#analysis"><span data-lang="en">Analysis</span><span data-lang="nl">Analyse</span></a>
+  <a href="#significance"><span data-lang="en">Significance</span><span data-lang="nl">Betekenis</span></a>
+</nav>
+
+<!-- ══════════════════════════ CONTEXT ══════════════════════════ -->
+<section id="context">
+  <div class="container">
+
+    <!-- EN -->
+    <div data-lang="en">
+      <div class="section-label">Historical Context</div>
+      <h2>A University Disputation on Vampires Before Vampires Had a Name</h2>
+      <p>In the summer of 1679, at the University of Leipzig, a young theologian named Philippus Rohr presented one of the earliest academic treatises ever written on what we would now call vampire phenomena. The dissertation was not about blood-drinking immortals from Gothic fiction — that imagery lay more than a century in the future. Instead, Rohr confronted a widespread folk belief that had terrified communities across Central Europe: that the dead could chew in their graves, consuming their own burial shrouds and flesh, and that this chewing was somehow linked to the spread of plague among the living.</p>
+      <p>The title he gave it — <em>Dissertatio Historico-Philosophica De Masticatione Mortuorum</em> — translates simply as "A Historical-Philosophical Dissertation on the Chewing of the Dead." It was presented on 16 August 1679, with Benjamin Frizschius as the defending respondent, and printed by Michael Vogt in Leipzig.</p>
+    </div>
+
+    <!-- NL -->
+    <div data-lang="nl">
+      <div class="section-label">Historische Context</div>
+      <h2>Een academisch dispuut over vampiers, voordat vampiers een naam hadden</h2>
+      <p>In de zomer van 1679 presenteerde een jonge theoloog genaamd Philippus Rohr aan de Universiteit van Leipzig een van de vroegste academische verhandelingen ooit geschreven over wat wij tegenwoordig vampierverschijnselen zouden noemen. De dissertatie ging niet over bloeddrinkende onsterfelijken uit gotische fictie — dat beeld lag meer dan een eeuw in de toekomst. In plaats daarvan boog Rohr zich over een wijdverbreid volksgeloof dat gemeenschappen door heel Centraal-Europa had geterroriseerd: het geloof dat de doden in hun graven konden kauwen, hun eigen lijkwaden en vlees konden verteren, en dat dit kauwen op de een of andere manier verbonden was met de verspreiding van de pest onder de levenden.</p>
+      <p>De titel die hij eraan gaf — <em>Dissertatio Historico-Philosophica De Masticatione Mortuorum</em> — vertaalt zich eenvoudigweg als "Een Historisch-Filosofische Verhandeling over het Kauwen der Doden." Het werd gepresenteerd op 16 augustus 1679, met Benjamin Frizschius als verdedigend respondent, en gedrukt door Michael Vogt in Leipzig.</p>
+    </div>
+
+    <div class="context-grid">
+      <div class="context-card">
+        <div class="card-icon">📜</div>
+        <div class="card-label" data-lang="en">Full Title</div>
+        <div class="card-label" data-lang="nl">Volledige Titel</div>
+        <div class="card-value">Dissertatio Historico-Philosophica De Masticatione Mortuorum</div>
+      </div>
+      <div class="context-card">
+        <div class="card-icon">🏛️</div>
+        <div class="card-label" data-lang="en">Institution</div>
+        <div class="card-label" data-lang="nl">Instelling</div>
+        <div class="card-value" data-lang="en">University of Leipzig</div>
+        <div class="card-value" data-lang="nl">Universiteit van Leipzig</div>
+        <div class="card-note" data-lang="en">One of the oldest German universities, founded 1409</div>
+        <div class="card-note" data-lang="nl">Een van de oudste Duitse universiteiten, opgericht in 1409</div>
+      </div>
+      <div class="context-card">
+        <div class="card-icon">📅</div>
+        <div class="card-label" data-lang="en">Date</div>
+        <div class="card-label" data-lang="nl">Datum</div>
+        <div class="card-value" data-lang="en">16 August 1679</div>
+        <div class="card-value" data-lang="nl">16 augustus 1679</div>
+        <div class="card-note" data-lang="en">Nearly 50 years before the word "vampire" entered European languages</div>
+        <div class="card-note" data-lang="nl">Bijna 50 jaar voordat het woord "vampier" de Europese talen bereikte</div>
+      </div>
+      <div class="context-card">
+        <div class="card-icon">✍️</div>
+        <div class="card-label" data-lang="en">Presiding</div>
+        <div class="card-label" data-lang="nl">Voorzitter</div>
+        <div class="card-value">M. Philippus Rohr</div>
+        <div class="card-note" data-lang="en">Of Marckranstädt, Meissen</div>
+        <div class="card-note" data-lang="nl">Uit Marckranstädt, Meissen</div>
+      </div>
+      <div class="context-card">
+        <div class="card-icon">🎓</div>
+        <div class="card-label">Respondent</div>
+        <div class="card-value">Benjamin Frizschius</div>
+        <div class="card-note" data-lang="en">Of Musilavia, Meissen; Electoral Alumni</div>
+        <div class="card-note" data-lang="nl">Uit Musilavia, Meissen; Keurvorstelijke Alumni</div>
+      </div>
+      <div class="context-card">
+        <div class="card-icon">🖨️</div>
+        <div class="card-label" data-lang="en">Printer</div>
+        <div class="card-label" data-lang="nl">Drukker</div>
+        <div class="card-value">Michael Vogt, Leipzig</div>
+        <div class="card-note">Typis Michaelis Vogtii</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ SUMMARY ══════════════════════════ -->
+<section id="summary">
+  <div class="container">
+
+    <!-- EN -->
+    <div data-lang="en">
+      <div class="section-label">Overview</div>
+      <h2>What This Dissertation Argues</h2>
+      <p>Rohr structures his work into two chapters. The first, <em>Caput I: Historicum</em> (The Historical Chapter), carefully catalogues reported cases of corpses found chewing in their coffins. The second, <em>Caput II: Philosophicum</em> (The Philosophical Chapter), attempts to explain the phenomenon, weighing natural and supernatural causes before settling on the Devil as the primary agent.</p>
+
+      <h3>Key Findings</h3>
+
+      <div class="finding">
+        <div class="finding-num">Finding I</div>
+        <p>The dead who chew are not those resurrected by divine power, nor those buried alive by mistake, nor corpses animated by the Devil outside their graves. They are genuinely dead bodies that produce chewing sounds and consume their shrouds while sealed in their tombs.</p>
+      </div>
+      <div class="finding">
+        <div class="finding-num">Finding II</div>
+        <p>The phenomenon was overwhelmingly reported during outbreaks of plague. Rohr collects cases from across Saxony, Silesia, Moravia, and Bohemia spanning several centuries, noting that some corpses were found to have devoured their shrouds and even their own flesh.</p>
+      </div>
+      <div class="finding">
+        <div class="finding-num">Finding III</div>
+        <p>The Devil is the true cause. After dismissing natural explanations — such as residual bodily heat, twitching of nerves, or animals entering the coffin — Rohr concludes that Satan manipulates the corpses to spread terror and plague, to defame the dead, to sow doubt about divine providence, and to provoke communities into the sinful act of exhuming and desecrating the bodies.</p>
+      </div>
+      <div class="finding">
+        <div class="finding-num">Finding IV</div>
+        <p>Exhumation and staking of corpses — the popular remedy — is condemned as morally, physically, and politically harmful. It offends God, shames the dead, spreads disease through toxic vapours, and plays directly into the Devil's hands. The only true remedies are faith, Scripture, prayer, and the protection of angels.</p>
+      </div>
+    </div>
+
+    <!-- NL -->
+    <div data-lang="nl">
+      <div class="section-label">Overzicht</div>
+      <h2>Wat deze dissertatie betoogt</h2>
+      <p>Rohr structureert zijn werk in twee hoofdstukken. Het eerste, <em>Caput I: Historicum</em> (Het Historische Hoofdstuk), catalogiseert zorgvuldig gerapporteerde gevallen van lijken die kauwend in hun kisten werden aangetroffen. Het tweede, <em>Caput II: Philosophicum</em> (Het Filosofische Hoofdstuk), tracht het verschijnsel te verklaren, waarbij natuurlijke en bovennatuurlijke oorzaken tegen elkaar worden afgewogen voordat de duivel als voornaamste oorzaak wordt aangewezen.</p>
+
+      <h3>Belangrijkste bevindingen</h3>
+
+      <div class="finding">
+        <div class="finding-num">Bevinding I</div>
+        <p>De doden die kauwen zijn niet degenen die door goddelijke kracht zijn opgewekt, noch degenen die per ongeluk levend zijn begraven, noch lijken die door de duivel buiten hun graven worden bezield. Het gaat om werkelijk dode lichamen die kauwgeluiden produceren en hun lijkwaden verteren terwijl ze verzegeld in hun graven liggen.</p>
+      </div>
+      <div class="finding">
+        <div class="finding-num">Bevinding II</div>
+        <p>Het verschijnsel werd overwegend gemeld tijdens pest-uitbraken. Rohr verzamelt gevallen uit heel Saksen, Silezië, Moravië en Bohemen, verspreid over meerdere eeuwen, en merkt op dat sommige lijken hun lijkwaden en zelfs hun eigen vlees bleken te hebben verslonden.</p>
+      </div>
+      <div class="finding">
+        <div class="finding-num">Bevinding III</div>
+        <p>De duivel is de ware oorzaak. Na het verwerpen van natuurlijke verklaringen — zoals resterende lichaamswarmte, zenuwreflexen of dieren die de kist binnendringen — concludeert Rohr dat Satan de lijken manipuleert om terreur en pest te verspreiden, om de doden te belasteren, om twijfel te zaaien over de goddelijke voorzienigheid, en om gemeenschappen aan te zetten tot de zondige daad van het opgraven en ontheiligen van de lichamen.</p>
+      </div>
+      <div class="finding">
+        <div class="finding-num">Bevinding IV</div>
+        <p>Het opgraven en doorboren van lijken — het populaire redmiddel — wordt veroordeeld als moreel, fysiek en politiek schadelijk. Het beledigt God, beschaamt de doden, verspreidt ziekte via giftige dampen en speelt de duivel direct in de kaart. De enige ware remedies zijn geloof, de Schrift, gebed en de bescherming van engelen.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════ FULL TRANSLATION ═══════════════════════ -->
+<section id="translation">
+  <div class="container">
+
+    <!-- EN -->
+    <div data-lang="en">
+      <div class="section-label">English Translation</div>
+      <h2>The Complete Dissertation, Translated</h2>
+      <p style="color: var(--text-muted); font-style: italic; margin-bottom: 1rem;">
+        Translated from the 17th-century Latin original. The OCR source contains imperfections typical of digitised early-modern print (long <em>s</em> rendered as <em>f</em>, ligature errors, etc.), which have been interpreted in context. Section numbers (Th. = Thesis) follow Rohr's original structure.
+      </p>
+      <button class="toggle-latin" onclick="document.body.classList.toggle('hide-latin'); this.textContent = document.body.classList.contains('hide-latin') ? 'Show Latin originals' : 'Hide Latin originals';">Hide Latin originals</button>
+    </div>
+
+    <!-- NL -->
+    <div data-lang="nl">
+      <div class="section-label">Nederlandse Vertaling</div>
+      <h2>De volledige dissertatie, vertaald</h2>
+      <p style="color: var(--text-muted); font-style: italic; margin-bottom: 1rem;">
+        Vertaald vanuit het 17e-eeuwse Latijnse origineel. De OCR-bron bevat onvolkomenheden die typerend zijn voor gedigitaliseerde vroegmoderne drukken (lange <em>s</em> weergegeven als <em>f</em>, ligatuurfouten, enz.), die in context zijn geïnterpreteerd. Sectienummers (Th. = Thesis) volgen Rohrs oorspronkelijke structuur.
+      </p>
+      <button class="toggle-latin" onclick="document.body.classList.toggle('hide-latin'); this.textContent = document.body.classList.contains('hide-latin') ? 'Latijnse originelen tonen' : 'Latijnse originelen verbergen';">Latijnse originelen verbergen</button>
+    </div>
+
+    <!-- ─── PREFACE ─── -->
+    <div class="translation-block">
+      <div class="thesis-marker" data-lang="en">Preface</div>
+      <div class="thesis-marker" data-lang="nl">Voorwoord</div>
+      <div class="latin-original">
+        Vi mortuorum historias pertexerunt, mentionem quoque faciunt cadaverum, quæ deprehensa sunt feralia, qvibus involuta fuerunt, amicula, imò & suammet carnem deglutivisse, simulac sonum instar porcorum mandentium edi disse…
+      </div>
+
+      <div class="translation-text" data-lang="en">
+        <p>Those who have woven together the histories of the dead also make mention of corpses that have been found to have swallowed the funerary wrappings in which they were enclosed, and even their own flesh, while producing a sound like that of pigs chewing. Various authorities have judged this matter in various ways up to now: some have attributed the whole affair to natural causes, and indeed to occult ones; others have had recourse to I know not what animals, which, being hungry, are said to prey upon the flesh of the deceased; and still others have held yet different opinions.</p>
+        <p>This material has seemed to us worthy of being treated in good order, reduced to the form of a proper disputation, so that what is finally to be thought of the whole business may to some extent become clear. We have resolved to discharge this labour at the present time, relying partly on the indulgence of the Reader in pardoning us if we should stumble anywhere in this doubtful matter, and partly on the authority of the most distinguished men, whose judgement — indeed, whose very words — we have been compelled to use by pressing necessity.</p>
+        <p>The material to be presented naturally divides itself into two chapters, of which the first claims for itself the <em>Historical</em> treatment, and the second the <em>Philosophical</em> investigation.</p>
+      </div>
+
+      <div class="translation-text" data-lang="nl">
+        <p>Zij die de geschiedenissen van de doden hebben samengesteld, maken ook melding van lijken waarvan gebleken is dat zij de grafdoeken waarin zij gewikkeld waren, hadden ingeslikt, en zelfs hun eigen vlees, terwijl zij een geluid voortbrachten als van kauwende varkens. Verschillende gezaghebbende schrijvers hebben tot nu toe op uiteenlopende wijze over deze zaak geoordeeld: sommigen schreven het geheel toe aan natuurlijke oorzaken, en wel aan verborgen oorzaken; anderen namen hun toevlucht tot ik weet niet welke dieren die, uitgehongerd, het vlees van de overledenen zouden aanknaauwen; en weer anderen hadden nog andere opvattingen.</p>
+        <p>Dit onderwerp leek ons het waard om in goede orde behandeld te worden, herleid tot de vorm van een behoorlijk dispuut, zodat wat er uiteindelijk van de hele zaak gedacht moet worden, tot op zekere hoogte duidelijk kan worden. Wij hebben besloten deze arbeid thans op ons te nemen, steunend deels op de welwillendheid van de Lezer om ons te vergeven indien wij ergens struikelen in deze twijfelachtige kwestie, en deels op het gezag van de meest vooraanstaande geleerden, wier oordeel — ja, wier eigen woorden — wij door dringende noodzaak genoopt zijn geweest te gebruiken.</p>
+        <p>Het te presenteren materiaal valt vanzelf uiteen in twee hoofdstukken, waarvan het eerste de <em>Historische</em> behandeling opeist, en het tweede het <em>Filosofische</em> onderzoek.</p>
+      </div>
+    </div>
+
+    <!-- ─── CHAPTER I ─── -->
+    <h3 data-lang="en">Chapter I: Historical</h3>
+    <h3 data-lang="nl">Hoofdstuk I: Historisch</h3>
+
+    <!-- Thesis 1 -->
+    <div class="translation-block">
+      <div class="thesis-marker">Thesis 1</div>
+      <div class="latin-original">
+        Mortuos, de quorum masticatione nostra dissertatio aget, intelligimus non tales, qui divina virtute excitati rursum comederunt.
+      </div>
+
+      <div class="translation-text" data-lang="en">
+        <p>By "the dead," whose chewing our dissertation will treat, we do not mean those who, having been raised by divine power, ate again.</p>
+        <p>Such persons are called "dead" in the usage of Scripture, the word being taken in an extended sense. Examples are supplied by various passages in the Biblical books, both Old and New Testament: cf. 1 Kings 17:22; 2 Kings 1:3; Matthew 9:26; Luke 7:12; John 12:1ff. From ecclesiastical history, Beyerlinck has collected many further examples in his <em>Theatrum Vitæ Humanæ</em>. The fabulous tales of the pagans are cited and refuted by Martin Delrio, <em>Disquisitiones Magicæ</em>, Book II, Question 29.</p>
+      </div>
+
+      <div class="translation-text" data-lang="nl">
+        <p>Met "de doden," wier kauwen onze dissertatie zal behandelen, bedoelen wij niet degenen die, opgewekt door goddelijke kracht, opnieuw hebben gegeten.</p>
+        <p>Zulke personen worden in het spraakgebruik van de Schrift "doden" genoemd, waarbij het woord in ruime zin wordt genomen. Voorbeelden worden geleverd door diverse passages uit de Bijbelse boeken, zowel het Oude als het Nieuwe Testament: vgl. 1 Koningen 17:22; 2 Koningen 1:3; Mattheüs 9:26; Lucas 7:12; Johannes 12:1 e.v. Uit de kerkgeschiedenis heeft Beyerlinck vele verdere voorbeelden verzameld in zijn <em>Theatrum Vitæ Humanæ</em>. De fabelachtige verhalen van de heidenen worden aangehaald en weerlegd door Martin Delrio, <em>Disquisitiones Magicæ</em>, Boek II, Vraagstuk 29.</p>
+      </div>
+    </div>
+
+    <!-- Thesis 2 -->
+    <div class="translation-block">
+      <div class="thesis-marker">Thesis 2</div>
+      <div class="latin-original">
+        Nec Mortuos intelligimus apparenter tales, qui vel sepulti casu quôdam surgendi potestatem nacti, vel nondum terræ mandati evigilarunt, & postmodum cibo sunt usi.
+      </div>
+
+      <div class="translation-text" data-lang="en">
+        <p>Nor do we mean those who were only <em>apparently</em> dead — those who, having been buried, obtained by some chance the ability to rise again, or who, not yet committed to the earth, awakened and subsequently took food.</p>
+        <p>It is true, as Kornmann writes in <em>De Miraculis Mortuorum</em>: "Spirits enclosed in human bodies often remain, but their motions are so secretly bound and their senses so impaired that it is not easily determined whether such bodies are alive or not." Hence the inexperienced sometimes take for dead those who are not, and have them carried out and buried, where the wretched creatures are condemned to perish — unless some intervening chance affords them the power to struggle free from so great a danger. Such conditions are called by physicians <em>aphonoi</em> (voiceless maladies). Delrio classifies here: (1) apoplectic, paralytic, and thunderstruck persons; (2) those seized by catalepsy; (3) those who have experienced uterine strangulation and jaundice; (4) those who have suffered <em>leipothymia</em> (fainting), by which disease Johannes Duns Scotus was afflicted — being buried alive as if dead, he perished, as Kornmann testifies, citing the elegant verses composed by Janus Vitalis upon his death:</p>
+        <div class="verse">
+          What has befallen no man ever, Traveller:<br>
+          Here I, Scotus, lie, buried once<br>
+          And twice dead — more subtle and captious<br>
+          Than all the Sophists.
+        </div>
+        <p>That fortune has sometimes favoured those who, taken for dead, were interred in the earth, so that they were able to rise again, is shown by the observation of writers. Kornmann records a notable example, depicted on a panel at St. Apostles in Cologne: A certain woman named Richemodis died of the plague in the year 1357. Her husband, out of conjugal love, left his wedding ring on her finger. The gravedigger, noticing this, approached the tomb at night with his servant and opened it. The servant descended and tried to pull off the ring; whereupon the woman sat upright. The gravedigger and his servant fled by the light of their lantern, and the woman, having taken it up, returned home, where her husband admitted her upon seeing the ring.</p>
+        <p>Similar stories are recorded by Pliny (<em>Natural History</em> VII.52) concerning Aviola, a man of consular rank who revived on his funeral pyre, and of L. Lamia, who recovered his life in the same manner, as noted also by Valerius Maximus (I.8). Such occurrences gave mortals reason not to hasten the burial of their own, and the Romans took from them the custom of raising a cry beside the deceased, to ascertain whether the soul still lingered in the body. Hence those in whom there was no hope of reviving were called <em>conclamati</em> ("cried over").</p>
+      </div>
+
+      <div class="translation-text" data-lang="nl">
+        <p>Evenmin bedoelen wij degenen die slechts <em>schijnbaar</em> dood waren — degenen die, eenmaal begraven, door enig toeval de mogelijkheid verkregen om weer op te staan, of die, nog niet aan de aarde toevertrouwd, ontwaakten en vervolgens voedsel tot zich namen.</p>
+        <p>Het is waar, zoals Kornmann schrijft in <em>De Miraculis Mortuorum</em>: "Geesten die in menselijke lichamen zijn opgesloten, blijven er dikwijls in verblijven, maar hun bewegingen zijn zo heimelijk gebonden en hun zintuigen zo aangetast, dat niet gemakkelijk te bepalen is of zulke lichamen leven of niet." Vandaar dat onervaren lieden soms voor dood houden wie dat niet zijn, en hen laten uitdragen en begraven, waar de ongelukkigen gedoemd zijn te sterven — tenzij een tussenkomend toeval hun de kracht geeft om uit zo groot een gevaar te ontsnappen. Dergelijke aandoeningen worden door geneeskundigen <em>aphonoi</em> (sprakeloze kwalen) genoemd. Delrio onderscheidt hier: (1) door beroerte, verlamming of blikseminslag getroffenen; (2) door katalepsie bevangenen; (3) degenen die baarmoederverstikking en geelzucht hebben ondervonden; (4) degenen die <em>leipothymia</em> (flauwvallen) hebben ondergaan, aan welke kwaal Johannes Duns Scotus leed — levend begraven als ware hij dood, kwam hij om, zoals Kornmann getuigt, onder verwijzing naar de elegante verzen die Janus Vitalis bij zijn dood componeerde:</p>
+        <div class="verse">
+          Wat geen mens ooit is overkomen, Reiziger:<br>
+          Hier lig ik, Scotus, eenmaal begraven<br>
+          En tweemaal gestorven — scherpzinniger en spitsvondiger<br>
+          Dan alle Sofisten.
+        </div>
+        <p>Dat het lot soms gunstig was voor hen die, voor dood gehouden, in de aarde werden gelegd, zodat zij konden herrijzen, blijkt uit de waarnemingen van schrijvers. Kornmann tekent een opmerkelijk voorbeeld op, afgebeeld op een paneel in de Sint-Apostelenkerk in Keulen: Een zekere vrouw genaamd Richemodis stierf aan de pest in het jaar 1357. Haar echtgenoot liet, uit huwelijksliefde, zijn trouwring aan haar vinger. De doodgraver, die dit opmerkte, ging 's nachts met zijn knecht naar het graf en opende het. De knecht daalde af en probeerde de ring af te trekken; waarop de vrouw rechtop ging zitten. De doodgraver en zijn knecht vluchtten bij het licht van hun lantaarn, en de vrouw, die deze had opgepakt, keerde naar huis terug, waar haar echtgenoot haar binnenliet toen hij de ring zag.</p>
+        <p>Soortgelijke verhalen zijn opgetekend door Plinius (<em>Naturalis Historia</em> VII.52) over Aviola, een man van consulaire rang die herleefde op zijn brandstapel, en over L. Lamia, die op dezelfde wijze het leven terugkreeg, zoals ook Valerius Maximus vermeldt (I.8). Zulke voorvallen gaven stervelingen reden om de begrafenis van hun dierbaren niet te bespoedigen, en de Romeinen ontleenden hieraan het gebruik om naast de overledene een kreet aan te heffen, om vast te stellen of de ziel nog in het lichaam schuilging. Vandaar dat degenen bij wie geen hoop op herleving bestond <em>conclamati</em> ("uitgeroepen") werden genoemd.</p>
+      </div>
+    </div>
+
+    <!-- Thesis 3 -->
+    <div class="translation-block">
+      <div class="thesis-marker">Thesis 3</div>
+      <div class="latin-original">
+        Nec intendimus masticationem mortuorum, extra sepulcra ope malefici spiritus apparentium.
+      </div>
+
+      <div class="translation-text" data-lang="en">
+        <p>Nor do we mean the chewing of the dead who appear <em>outside</em> their tombs through the aid of an evil spirit.</p>
+        <p>It is certain that the Devil cannot resurrect the dead — a truth we hold both by divine faith and by philosophical reason, which has established that from a complete and total privation there is no natural return to the former state. We do not deny, however, that it has often happened, and may still happen today, that the bodies of certain deceased persons are brought forth from their graves by the ministry of the Demon (God permitting) and perform certain actions — or rather <em>semblances</em> of actions — and consequently also eat. As Delrio writes: "Many things of this sort are typically illusions of the Demon. Sometimes he steals the bodies of the dead and substitutes other, airy bodies which he moves as if they were living; or he himself enters their remains. For sometimes he feigns that bodies which are truly cadavers are alive, by riding within them — and just as a sailor moves a ship, so he himself moves them, and compels them to imitate the acts and gestures of the living."</p>
+      </div>
+
+      <div class="translation-text" data-lang="nl">
+        <p>Evenmin bedoelen wij het kauwen van de doden die <em>buiten</em> hun graven verschijnen door de hulp van een boze geest.</p>
+        <p>Het staat vast dat de duivel de doden niet kan opwekken — een waarheid die wij zowel door goddelijk geloof als door filosofische rede aannemen, die heeft vastgesteld dat er vanuit een volledige en totale beroofdheid geen natuurlijke terugkeer is naar de vroegere toestand. Wij ontkennen echter niet dat het vaak is voorgekomen, en ook heden ten dage nog kan voorkomen, dat de lichamen van bepaalde overledenen uit hun graven worden gevoerd door de dienst van de Demon (met Gods toelating) en bepaalde handelingen verrichten — of liever <em>schijnhandelingen</em> — en bijgevolg ook eten. Zoals Delrio schrijft: "Veel van dergelijke zaken zijn doorgaans begoochelingen van de Demon. Soms steelt hij de lichamen van de doden en vervangt ze door andere, luchtige lichamen die hij beweegt alsof ze levend zijn; of hij vaart zelf in hun overblijfselen. Want soms doet hij alsof lichamen die werkelijk kadavers zijn, leven, door er zelf in te rijden — en zoals een zeeman een schip beweegt, zo beweegt hij zelf die lichamen en dwingt hij ze de daden en gebaren van de levenden na te bootsen."</p>
+      </div>
+    </div>
+
+    <!-- Thesis 4 -->
+    <div class="translation-block">
+      <div class="thesis-marker">Thesis 4</div>
+
+      <div class="translation-text" data-lang="en">
+        <p>Nor, finally, do we speak of those who were only apparently dead, who truly ate within their tombs by their own power.</p>
+        <p>At Kornmann's account, such an example presents itself. A young noblewoman from Cologne, having been buried near the Augustinian convent, was heard at night by the monks making noises in her tomb. They opened the grave and found her sitting up; she had gnawed her own fingers out of hunger, and upon being rescued, she survived for many years thereafter.</p>
+      </div>
+
+      <div class="translation-text" data-lang="nl">
+        <p>Evenmin spreken wij ten slotte over degenen die slechts schijnbaar dood waren en die werkelijk in hun graven aten door eigen kracht.</p>
+        <p>Bij Kornmanns verslag doet zich zo'n voorbeeld voor. Een jonge edelvrouw uit Keulen, begraven nabij het Augustijnenklooster, werd 's nachts door de monniken gehoord terwijl zij geluiden maakte in haar graf. Zij openden het graf en vonden haar rechtop zittend; zij had uit honger haar eigen vingers afgeknaagd, en nadat zij gered was, leefde zij nog vele jaren daarna.</p>
+      </div>
+
+      <div class="translation-note" data-lang="en">
+        Rohr's methodological care is notable here: he systematically excludes divine resurrections, premature burials, demonic apparitions, and cases of living persons trapped in tombs — narrowing his subject strictly to corpses that are genuinely dead yet still chew.
+      </div>
+      <div class="translation-note" data-lang="nl">
+        Rohrs methodologische zorgvuldigheid is hier opmerkelijk: hij sluit systematisch goddelijke opwekkingen, voortijdige begrafenissen, demonische verschijningen en gevallen van levende personen opgesloten in graven uit — en beperkt zijn onderwerp strikt tot lijken die werkelijk dood zijn en toch kauwen.
+      </div>
+    </div>
+
+    <!-- Thesis 5-8: Historical cases -->
+    <div class="translation-block">
+      <div class="thesis-marker">Thesis 5–8</div>
+
+      <div class="translation-text" data-lang="en">
+        <p>Having cleared away these preliminary distinctions, Rohr now states his proper subject: <strong>we speak of those who are truly and wholly dead, and who nevertheless chew within their sealed graves.</strong></p>
+        <p>He presents a catalogue of historical cases. In the year 1345, a woman in Bohemia was found after burial to have devoured half her head-covering. When her grave was opened, the townsfolk saw her lying with the linen in her mouth. Following the custom of the time, the body was exhumed, a stake was driven through it, and the corpse was secured to the earth.</p>
+        <p>During a plague at Marburg, a dead woman was heard from her grave making a sound like a pig rooting and grunting. When the tomb was opened, she was found to have consumed nearly all of her own shroud. In another case, from Harsdörffer's <em>Theatrum Exemplorum Tragicorum</em>, a dead man was found with his arms drawn to his mouth, having gnawed the flesh from both arms up to the elbows. At a village near Hamburg in 1603, during an epidemic, a child who had been buried was heard making a racket in its coffin. Upon exhumation, the child had chewed and swallowed a large part of its wrappings.</p>
+        <p>Rohr adds further attestations from Saxony, Silesia, and other regions, including a case in which the chewing corpse was believed to be linked to the continued spread of plague in the community. He notes that some witnesses claimed to hear a sound resembling a sow eating greedily emanating from the sealed grave.</p>
+      </div>
+
+      <div class="translation-text" data-lang="nl">
+        <p>Na deze inleidende onderscheidingen weggenomen te hebben, formuleert Rohr nu zijn eigenlijke onderwerp: <strong>wij spreken over degenen die werkelijk en geheel dood zijn, en die desondanks kauwen in hun verzegelde graven.</strong></p>
+        <p>Hij presenteert een catalogus van historische gevallen. In het jaar 1345 werd een vrouw in Bohemen na haar begrafenis aangetroffen nadat zij de helft van haar hoofdbedekking had verslonden. Toen haar graf werd geopend, zagen de stedelingen haar liggen met het linnen in haar mond. Volgens het gebruik van die tijd werd het lichaam opgegraven, werd er een staak doorheen gedreven en werd het lijk aan de aarde vastgezet.</p>
+        <p>Tijdens een pestepidemie in Marburg werd een dode vrouw vanuit haar graf gehoord terwijl zij een geluid maakte als van een wroetend en knorrend varken. Toen het graf werd geopend, bleek zij bijna haar gehele lijkwade te hebben verslonden. In een ander geval, uit Harsdörffers <em>Theatrum Exemplorum Tragicorum</em>, werd een dode man aangetroffen met zijn armen naar zijn mond getrokken, nadat hij het vlees van beide armen tot aan de ellebogen had afgeknaagd. Bij een dorp nabij Hamburg in 1603, tijdens een epidemie, werd een kind dat begraven was, gehoord terwijl het lawaai maakte in zijn kist. Bij opgraving bleek het kind een groot deel van zijn wikkels te hebben gekauwd en ingeslikt.</p>
+        <p>Rohr voegt verdere getuigenissen toe uit Saksen, Silezië en andere regio's, waaronder een geval waarin het kauwende lijk geacht werd verbonden te zijn met de voortdurende verspreiding van de pest in de gemeenschap. Hij merkt op dat sommige getuigen beweerden een geluid te horen dat leek op een gulzig etende zeug, dat uit het verzegelde graf opsteeg.</p>
+      </div>
+    </div>
+
+    <!-- CHAPTER II -->
+    <h3 data-lang="en">Chapter II: Philosophical</h3>
+    <h3 data-lang="nl">Hoofdstuk II: Filosofisch</h3>
+
+    <!-- Thesis 9-10 -->
+    <div class="translation-block">
+      <div class="thesis-marker">Thesis 9–10</div>
+
+      <div class="translation-text" data-lang="en">
+        <p>Having set out the history, we now pass to the <em>philosophical investigation</em>. Two questions present themselves: first, <em>whether</em> the dead can truly chew in their graves; second, <em>what causes</em> are to be assigned to this chewing.</p>
+        <p>As to the first question, Rohr maintains that the fact of the chewing of the dead must be accepted as established. The witnesses are numerous and credible; the physical evidence — shrouds found consumed, flesh gnawed — speaks for itself. Those who reject the phenomenon outright do so out of an excessive philosophical scepticism that refuses to credit even the testimony of their own senses and of honest men.</p>
+      </div>
+
+      <div class="translation-text" data-lang="nl">
+        <p>Na de geschiedenis te hebben uiteengezet, gaan wij nu over tot het <em>filosofische onderzoek</em>. Twee vragen doen zich voor: ten eerste, <em>of</em> de doden werkelijk in hun graven kunnen kauwen; ten tweede, <em>welke oorzaken</em> aan dit kauwen moeten worden toegeschreven.</p>
+        <p>Wat de eerste vraag betreft, stelt Rohr dat het feit van het kauwen der doden als vaststaand moet worden aanvaard. De getuigen zijn talrijk en geloofwaardig; het fysieke bewijs — verslonden lijkwaden, afgeknaagd vlees — spreekt voor zich. Degenen die het verschijnsel ronduit verwerpen, doen dit uit een overdreven filosofische scepsis die zelfs de getuigenis van hun eigen zintuigen en van eerlijke mannen weigert te aanvaarden.</p>
+      </div>
+    </div>
+
+    <!-- Thesis 11 -->
+    <div class="translation-block">
+      <div class="thesis-marker">Thesis 11</div>
+
+      <div class="translation-text" data-lang="en">
+        <p>Turning to the causes, Rohr first examines and rejects several <em>natural</em> explanations:</p>
+        <p>Some have attributed the chewing to a residual vital motion in the body — a remnant of the life-force that continues to operate mechanically for a time after death. Rohr rejects this: once the soul has departed and the body's organisation has dissolved, no genuine vital action is possible.</p>
+        <p>Others have suggested that animals — rats, worms, or other vermin — enter the coffin and consume the shroud, producing noises that the credulous mistake for chewing. Rohr acknowledges this is possible in some cases, but argues it cannot account for the specific character of the sounds reported, nor for the discovery of corpses clutching half-eaten shrouds in their mouths, nor for the observed correlation between the chewing and outbreaks of plague.</p>
+        <p>A third natural hypothesis appeals to purely chemical processes of decomposition. Rohr dismisses this as insufficient to explain the deliberate, sustained character of the chewing as described by eyewitnesses.</p>
+      </div>
+
+      <div class="translation-text" data-lang="nl">
+        <p>Wat de oorzaken betreft, onderzoekt en verwerpt Rohr eerst verscheidene <em>natuurlijke</em> verklaringen:</p>
+        <p>Sommigen schreven het kauwen toe aan een resterende levensbeweging in het lichaam — een overblijfsel van de levenskracht die na de dood nog enige tijd mechanisch doorwerkt. Rohr verwerpt dit: zodra de ziel is vertrokken en de organisatie van het lichaam is ontbonden, is geen echte vitale handeling meer mogelijk.</p>
+        <p>Anderen opperen dat dieren — ratten, wormen of ander ongedierte — de kist binnendringen en de lijkwade verslinden, waarbij geluiden worden geproduceerd die de lichtgelovigen voor kauwen houden. Rohr erkent dat dit in sommige gevallen mogelijk is, maar betoogt dat het niet kan verklaren: het specifieke karakter van de gerapporteerde geluiden, noch de ontdekking van lijken die half opgegeten lijkwaden in hun mond klemden, noch het waargenomen verband tussen het kauwen en pest-uitbraken.</p>
+        <p>Een derde natuurlijke hypothese beroept zich op zuiver chemische ontbindingsprocessen. Rohr verwerpt deze als ontoereikend om het opzettelijke, aanhoudende karakter van het kauwen, zoals beschreven door ooggetuigen, te verklaren.</p>
+      </div>
+    </div>
+
+    <!-- Thesis 12-13 -->
+    <div class="translation-block">
+      <div class="thesis-marker">Thesis 12–13</div>
+      <div class="latin-original">Causam masticationis in mortuis constituimus Diabolum.</div>
+
+      <div class="translation-text" data-lang="en">
+        <p><strong>We establish the cause of the chewing in the dead to be the Devil.</strong></p>
+        <p>This is the central thesis of the dissertation. Rohr argues that Satan, permitted by God, enters into and manipulates the bodies of the dead, causing them to chew. He does not act from idle mischief; he has specific purposes, both theological and physical.</p>
+        <p>Rohr amplifies his argument from the authority of Garmann, who teaches that the Devil can move the limbs and jaws of the dead as a puppeteer works a marionette. Since the corpse is merely matter without a governing soul, the Devil encounters no spiritual resistance. God permits this, as He permits all the Devil's lesser works, for the testing and strengthening of the faithful.</p>
+      </div>
+
+      <div class="translation-text" data-lang="nl">
+        <p><strong>Wij stellen vast dat de oorzaak van het kauwen bij de doden de Duivel is.</strong></p>
+        <p>Dit is de centrale stelling van de dissertatie. Rohr betoogt dat Satan, met toelating van God, de lichamen van de doden binnentreedt en manipuleert, waardoor zij kauwen. Hij handelt niet uit loze baldadigheid; hij heeft specifieke doelen, zowel theologisch als fysiek.</p>
+        <p>Rohr versterkt zijn argument met het gezag van Garmann, die leert dat de Duivel de ledematen en kaken van de doden kan bewegen zoals een poppenspeler een marionet bedient. Aangezien het lijk slechts materie is zonder een besturende ziel, ondervindt de Duivel geen geestelijke weerstand. God staat dit toe, zoals Hij alle mindere werken van de Duivel toelaat, ter beproeving en versterking van de gelovigen.</p>
+      </div>
+    </div>
+
+    <!-- Thesis 14-15 -->
+    <div class="translation-block">
+      <div class="thesis-marker">Thesis 14–15</div>
+      <div class="latin-original">Tempore pestis potissimum, alio non ita frequenter in cryptis mortuorum glocitant cadavera. … Causas, quæ impellunt Satanam ad masticandum per cadavera, constituimus duplices, nempe Theologicas & Physicas.</div>
+
+      <div class="translation-text" data-lang="en">
+        <p><strong>It is chiefly during times of plague that corpses cluck and chew in the crypts of the dead.</strong> The examples cited above confirm this. Conrad Schlüsselburg writes: "One hears and experiences it often during times of epidemic."</p>
+        <p><strong>The causes that impel Satan to chew through corpses are twofold: Theological and Physical.</strong></p>
+        <h4>Theological Causes</h4>
+        <p>Schlüsselburg enumerates six theological reasons. Regarding the dead, the Devil seeks to <strong>defame them and accuse them of impiety</strong>. He particularly targets the bodies of women, being the implacable enemy of the weaker sex, since from a woman was born He who is stronger than the Devil himself.</p>
+        <p>Regarding the living, the Devil acts: (1) to make people <strong>doubt divine providence</strong>; (2) to arm them with a <strong>false sense of security</strong> against serious thoughts about their own sins — for the insatiable devourer of souls prefers that people attribute the plagues to the chewing corpse rather than to their own sins; (3) to give survivors occasion to <strong>think ill of the dead</strong>; (4) to <strong>sow quarrels</strong> among the living over whether to exhume the corpses.</p>
+        <h4>Physical Causes</h4>
+        <p>Garmann identifies two physical reasons: (1) to <strong>strike terror</strong> into the living; (2) to <strong>infect the air</strong>, should the corpses be exhumed, with poisonous miasmas. Both effectively propagate the plague. At the village of Nienstadt near Hamburg in 1603, a corpse exhumed and beheaded by the locals infected the surrounding air so thoroughly that the pastor who lived nearby died together with his wife and two daughters.</p>
+      </div>
+
+      <div class="translation-text" data-lang="nl">
+        <p><strong>Het is voornamelijk in tijden van pest dat lijken klokken en kauwen in de grafkelders.</strong> De eerder aangehaalde voorbeelden bevestigen dit. Conrad Schlüsselburg schrijft: "Men hoort en ervaart het vaak tijdens tijden van epidemie."</p>
+        <p><strong>De oorzaken die Satan ertoe aanzetten om door lijken te kauwen, zijn tweeledig: Theologisch en Fysiek.</strong></p>
+        <h4>Theologische oorzaken</h4>
+        <p>Schlüsselburg somt zes theologische redenen op. Wat de doden betreft, tracht de Duivel hen te <strong>belasteren en van goddeloosheid te beschuldigen</strong>. Hij richt zich met name op de lichamen van vrouwen, als onverzoenlijke vijand van het zwakkere geslacht, aangezien uit een vrouw Degene geboren werd die sterker is dan de Duivel zelf.</p>
+        <p>Wat de levenden betreft handelt de Duivel: (1) om mensen te laten <strong>twijfelen aan de goddelijke voorzienigheid</strong>; (2) om hen een <strong>vals gevoel van veiligheid</strong> te geven tegen serieuze gedachten over hun eigen zonden — want de onverzadigbare zielenverslinder verkiest dat mensen de plagen toeschrijven aan het kauwende lijk in plaats van aan hun eigen zonden; (3) om overlevenden aanleiding te geven <strong>kwaad te denken over de doden</strong>; (4) om <strong>twisten te zaaien</strong> onder de levenden over de vraag of de lijken moeten worden opgegraven.</p>
+        <h4>Fysieke oorzaken</h4>
+        <p>Garmann noemt twee fysieke redenen: (1) om de levenden <strong>schrik aan te jagen</strong>; (2) om <strong>de lucht te besmetten</strong>, mochten de lijken worden opgegraven, met giftige dampen. Beide zijn doeltreffende middelen om de pest te verspreiden. Bij het dorp Nienstadt nabij Hamburg in 1603 besmette een door de plaatselijke boeren opgegraven en onthoofd lijk de omringende lucht zo ernstig dat de predikant die nabij de begraafplaats woonde, stierf samen met zijn vrouw en twee dochters.</p>
+      </div>
+    </div>
+
+    <!-- Thesis 16: Remedies -->
+    <div class="translation-block">
+      <div class="thesis-marker">Thesis 16</div>
+      <div class="latin-original">Remedia huic malo averruncando adhiberi sveta sunt vel vera, vel falsa.</div>
+
+      <div class="translation-text" data-lang="en">
+        <p><strong>The remedies customarily applied to ward off this evil are either true or false.</strong></p>
+        <h4>False Remedies</h4>
+        <p>Among the false remedies, Rohr first addresses the <strong>Jewish custom</strong>: pressing the thumbs of the deceased into their palms so the fist-creases form the name of God — Shaddai (שדי, "Almighty") — believing this terrifies Satan. Rohr finds this unconvincing: why should the Demon flee at a fist-crease when he does not shrink from attacking the living who make the same sign?</p>
+        <p>He dismisses the <strong>Papal consecration of cemeteries</strong>, supposedly expelling devils from consecrated ground. Rohr calls this a wretched amulet: the Demon does not shrink from assailing those consecrated by Baptism and nourished with Christ's Body and Blood.</p>
+        <p>Among <strong>folk remedies</strong>: placing earth under the dead's chin to prevent them opening their mouths; placing a stone and coin in the mouth (an echo of the ancient pagan custom of Charon's obol); and, once chewing has begun, the <strong>exhumation, beheading, and staking</strong> of the corpse — which Rohr condemns as <strong>morally</strong> sinful (offending God, shaming the dead), <strong>physically</strong> counterproductive (releasing toxic vapours, spreading plague), and <strong>politically</strong> unlawful (exhumation has always been forbidden by lawmakers).</p>
+        <h4>True Remedies</h4>
+        <p>The only effective defences: (1) <strong>Faith</strong>, grounded in Christ, the crusher of the serpent's head. (2) <strong>The Word of God</strong>, the sword handed to us by the Apostle. (3) <strong>Prayer</strong>, the scourge of the Demon and the death of spectres. (4) <strong>The aid of angels</strong>, who keep us safe from "the arrow that flies by day" and "the pestilence that stalks in darkness" (Psalm 91:6).</p>
+      </div>
+
+      <div class="translation-text" data-lang="nl">
+        <p><strong>De geneesmiddelen die gewoonlijk worden aangewend om dit kwaad af te weren, zijn ofwel waar, ofwel vals.</strong></p>
+        <h4>Valse remedies</h4>
+        <p>Onder de valse remedies behandelt Rohr eerst het <strong>Joodse gebruik</strong>: de duimen van de overledene in de handpalmen drukken zodat de plooien van de vuist de naam van God vormen — Shaddai (שדי, "Almachtige") — in de veronderstelling dat dit Satan verschrikt. Rohr vindt dit onovertuigend: waarom zou de Demon vluchten bij het zien van een vuistplooi, als hij niet terugdeinst voor het aanvallen van levenden die hetzelfde teken maken?</p>
+        <p>Hij verwerpt de <strong>pauselijke wijding van begraafplaatsen</strong>, die duivels zou verdrijven van gewijde grond. Rohr noemt dit een armzalig amulet: de Demon deinst niet terug voor het aanvallen van hen die door de Doop gewijd en met het Lichaam en Bloed van Christus gevoed zijn.</p>
+        <p>Onder de <strong>volksremedies</strong>: aarde onder de kin van de dode leggen om te voorkomen dat deze de mond opent; een steen en munt in de mond leggen (een echo van het oude heidense gebruik van de obool voor Charon); en, wanneer het kauwen eenmaal is begonnen, het <strong>opgraven, onthoofden en doorboren</strong> van het lijk — wat Rohr veroordeelt als <strong>moreel</strong> zondig (God beledigen, de dode beschamen), <strong>fysiek</strong> contraproductief (giftige dampen vrijlaten, pest verspreiden) en <strong>politiek</strong> onwettig (opgraving is altijd door wetgevers verboden).</p>
+        <h4>Ware remedies</h4>
+        <p>De enige doeltreffende verdedigingen: (1) <strong>Geloof</strong>, gegrondvest in Christus, de verpletter van de slangenkop. (2) <strong>Het Woord van God</strong>, het zwaard dat ons door de Apostel is overhandigd. (3) <strong>Gebed</strong>, de gesel van de Demon en de dood van spoken. (4) <strong>De hulp van engelen</strong>, die ons beschermen tegen "de pijl die overdag vliegt" en "de pest die rondwaart in het duister" (Psalm 91:6).</p>
+      </div>
+    </div>
+
+    <!-- CLOSING -->
+    <div class="translation-block">
+      <div class="thesis-marker" data-lang="en">Closing Prayer</div>
+      <div class="thesis-marker" data-lang="nl">Slotgebed</div>
+      <div class="latin-original">
+        Ceterum veneramur summum Numen supplicibus precibus, ut à nostris provinciis, præprimis his Musarum alvearibus averruncet omnem noxam, impediatque Dæmonis πολυποικίλες fraudes! Ab insidiis Diaboli, & à peste libera nos Domine!
+      </div>
+
+      <div class="translation-text" data-lang="en">
+        <p>Moreover, we venerate the Supreme Deity with suppliant prayers, that He may ward off from our provinces — and above all from these hives of the Muses — every harm, and thwart the manifold wiles of the Demon! <em>From the snares of the Devil, and from pestilence, deliver us, O Lord!</em></p>
+      </div>
+      <div class="translation-text" data-lang="nl">
+        <p>Voorts vereren wij de Allerhoogste God met smeekbeden, dat Hij van onze provincies — en bovenal van deze bijenkorven der Muzen — alle kwaad moge afweren, en de veelvuldige listen van de Demon moge verijdelen! <em>Van de strikken des Duivels, en van de pest, verlos ons, Heer!</em></p>
+      </div>
+    </div>
+
+    <!-- EPIMETRA -->
+    <div class="translation-block">
+      <div class="thesis-marker" data-lang="en">Epimetra (Supplementary Theses for Disputation)</div>
+      <div class="thesis-marker" data-lang="nl">Epimetra (Aanvullende stellingen voor het dispuut)</div>
+
+      <div class="translation-text" data-lang="en">
+        <p>Appended to the dissertation are six brief theses proposed for academic disputation, as was customary:</p>
+        <p>1. Whether it is correct to write, following Thomas Gataker, <em>qi, qæ, qod</em> for <em>qui, quæ, quod</em>?</p>
+        <p>2. [Thesis on a grammatical or philological point — text partially illegible in the original.]</p>
+        <p>3. It is difficult to prove from the phrase <em>Ebaïdi dialektō</em> (Acts 26:14) that the Hebrew language was in use in the Old Testament period.</p>
+        <p>4. A hyperbolic manner of speaking is not a lie.</p>
+        <p>5. An unavoidable sin must truly be regarded as a sin.</p>
+        <p>6. The metamorphosis or transformation of humans into beasts is a fiction.</p>
+        <p style="text-align: center; margin-top: 2rem; color: var(--accent); font-style: italic; font-size: 1.1rem;">— FINIS —</p>
+      </div>
+
+      <div class="translation-text" data-lang="nl">
+        <p>Aan de dissertatie zijn zes korte stellingen toegevoegd die, zoals gebruikelijk, ter academische disputatie werden voorgesteld:</p>
+        <p>1. Of het juist is om, naar Thomas Gataker, <em>qi, qæ, qod</em> te schrijven in plaats van <em>qui, quæ, quod</em>?</p>
+        <p>2. [Stelling over een grammaticaal of filologisch punt — tekst gedeeltelijk onleesbaar in het origineel.]</p>
+        <p>3. Het is moeilijk om uit de frase <em>Ebaïdi dialektō</em> (Handelingen 26:14) te bewijzen dat de Hebreeuwse taal in gebruik was in de oudtestamentische periode.</p>
+        <p>4. Een hyperbolische manier van spreken is geen leugen.</p>
+        <p>5. Een onvermijdelijke zonde moet werkelijk als zonde worden beschouwd.</p>
+        <p>6. De metamorfose of gedaantewisseling van mensen in dieren is een verdichtsel.</p>
+        <p style="text-align: center; margin-top: 2rem; color: var(--accent); font-style: italic; font-size: 1.1rem;">— EINDE —</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════ ANALYSIS ═══════════════════════════ -->
+<section id="analysis">
+  <div class="container">
+
+    <div data-lang="en">
+      <div class="section-label">Critical Analysis</div>
+      <h2>What Rohr's Dissertation Reveals</h2>
+    </div>
+    <div data-lang="nl">
+      <div class="section-label">Kritische Analyse</div>
+      <h2>Wat Rohrs dissertatie onthult</h2>
+    </div>
+
+    <div class="argument-map">
+      <div class="argument-item">
+        <h4 data-lang="en">A Proto-Vampirology Before Vampires</h4>
+        <h4 data-lang="nl">Een proto-vampirologie vóór de vampieren</h4>
+        <p data-lang="en">Rohr's dissertation predates the word "vampire" in European languages by nearly fifty years (the term entered German and English around 1725–32, via Serbian reports from the Habsburg frontier). Yet the phenomena he describes — corpses that feed in their graves, a sympathetic link between the chewing dead and plague among the living, the folk remedy of exhumation and staking — are unmistakably part of the constellation of beliefs that would later crystallise under the vampire label. This text is one of the foundational documents of what scholars now call the "vampire controversy" of early modern Europe.</p>
+        <p data-lang="nl">Rohrs dissertatie dateert van bijna vijftig jaar vóór het woord "vampier" de Europese talen bereikte (de term kwam rond 1725–32 het Duits en Engels binnen, via Servische berichten van de Habsburgse grens). Toch zijn de verschijnselen die hij beschrijft — lijken die in hun graven eten, een sympathetisch verband tussen de kauwende doden en pest onder de levenden, het volksremedie van opgraving en doorboring — onmiskenbaar deel van het cluster van overtuigingen dat later zou kristalliseren onder het etiket "vampier." Deze tekst is een van de grondleggende documenten van wat geleerden nu de "vampierencontroverse" van het vroegmoderne Europa noemen.</p>
+      </div>
+
+      <div class="argument-item">
+        <h4 data-lang="en">The Scientific Method Meets the Supernatural</h4>
+        <h4 data-lang="nl">De wetenschappelijke methode ontmoet het bovennatuurlijke</h4>
+        <p data-lang="en">Rohr's approach is strikingly methodical for a 17th-century theological text. He begins by establishing his subject through careful exclusions (not divine resurrections, not premature burials, not demonic apparitions outside the grave, not the living trapped in tombs). He then presents historical evidence, evaluates competing hypotheses, and arrives at a conclusion. That his conclusion is "the Devil did it" should not obscure the genuine rationality of his procedure — or the fact that he seriously engages with and refutes naturalistic explanations. This is scholastic reasoning applied to folklore, and it represents a transitional moment between medieval supernaturalism and Enlightenment rationalism.</p>
+        <p data-lang="nl">Rohrs aanpak is opvallend methodisch voor een 17e-eeuwse theologische tekst. Hij begint met het afbakenen van zijn onderwerp door zorgvuldige uitsluitingen (geen goddelijke opwekkingen, geen voortijdige begrafenissen, geen demonische verschijningen buiten het graf, geen levenden opgesloten in graven). Vervolgens presenteert hij historisch bewijs, evalueert hij concurrerende hypothesen en komt hij tot een conclusie. Dat zijn conclusie "de Duivel deed het" luidt, mag de werkelijke rationaliteit van zijn procedure niet verhullen — noch het feit dat hij serieus ingaat op en naturalistische verklaringen weerlegt. Dit is scholastiek redeneren toegepast op folklore, en het vertegenwoordigt een overgangsmoment tussen middeleeuws supranaturalisme en Verlichtingsrationalisme.</p>
+      </div>
+
+      <div class="argument-item">
+        <h4 data-lang="en">A Window into Plague Psychology</h4>
+        <h4 data-lang="nl">Een venster op de psychologie van de pest</h4>
+        <p data-lang="en">The dissertation is invaluable as a record of how communities made sense of epidemic disease before germ theory. The chewing dead served as a folk explanation for the seemingly arbitrary spread of plague: the corpse continues to "consume" the living from its grave, and the plague spreads as long as it chews. This is a form of contagion theory — wrong in its mechanism, but not entirely irrational in its intuition that the dead and the circumstances of burial could be connected to disease transmission. Rohr himself inadvertently validates this when he describes how exhuming plague corpses at Nienstadt in 1603 led to further deaths from "venomous exhalations."</p>
+        <p data-lang="nl">De dissertatie is van onschatbare waarde als document van hoe gemeenschappen epidemische ziekten probeerden te begrijpen vóór de kiemtheorie. De kauwende doden dienden als volksverklaring voor de schijnbaar willekeurige verspreiding van de pest: het lijk blijft vanuit zijn graf de levenden "verteren," en de pest verspreidt zich zolang het kauwt. Dit is een vorm van besmettingstheorie — onjuist in haar mechanisme, maar niet geheel irrationeel in haar intuïtie dat de doden en de omstandigheden van de begrafenis verbonden konden zijn met ziekteoverdracht. Rohr zelf bevestigt dit onbedoeld wanneer hij beschrijft hoe het opgraven van pestlijken in Nienstadt in 1603 leidde tot verdere sterfgevallen door "giftige uitwasemingen."</p>
+      </div>
+
+      <div class="argument-item">
+        <h4 data-lang="en">Theodicy and the Devil's Toolkit</h4>
+        <h4 data-lang="nl">Theodicee en het gereedschap van de Duivel</h4>
+        <p data-lang="en">Rohr's six theological motives for Satanic chewing amount to a compact theodicy of plague. Why does God permit this horror? Because the Devil uses it as a multi-purpose weapon: to defame the dead, to shake the faith of the living, to distract sinners from repentance, to slander the reputations of the deceased, and — most cunningly — to provoke communities into the very exhumations that spread the disease further. The Devil's strategy, in Rohr's telling, is a masterclass in manipulation: he creates the problem (chewing corpses), then ensures that the human "solution" (exhumation) makes things worse.</p>
+        <p data-lang="nl">Rohrs zes theologische motieven voor Satanisch kauwen vormen samen een compacte theodicee van de pest. Waarom staat God deze gruwel toe? Omdat de Duivel het gebruikt als een veelzijdig wapen: om de doden te belasteren, het geloof van de levenden te schokken, zondaars af te leiden van berouw, de reputatie van de overledenen te besmeuren, en — het sluwst van alles — gemeenschappen aan te zetten tot precies die opgravingen die de ziekte verder verspreiden. De strategie van de Duivel is, in Rohrs weergave, een meesterklas in manipulatie: hij creëert het probleem (kauwende lijken) en zorgt er vervolgens voor dat de menselijke "oplossing" (opgraving) alles erger maakt.</p>
+      </div>
+
+      <div class="argument-item">
+        <h4 data-lang="en">Against Exhumation: A Progressive Stance</h4>
+        <h4 data-lang="nl">Tegen opgraving: een vooruitstrevend standpunt</h4>
+        <p data-lang="en">Perhaps the most practically significant argument in the dissertation is Rohr's emphatic condemnation of the exhumation and staking of corpses. While grounded in theology and law, Rohr also advances a genuinely medical argument: opening plague graves releases poisonous vapours that spread disease. In an era when communities routinely dug up and mutilated corpses to stop epidemics, Rohr's insistence that this practice was counterproductive represents a voice of comparative sanity — and he was, from the perspective of modern epidemiology, essentially correct.</p>
+        <p data-lang="nl">Misschien wel het meest praktisch significante argument in de dissertatie is Rohrs nadrukkelijke veroordeling van het opgraven en doorboren van lijken. Hoewel gegrondvest in theologie en recht, brengt Rohr ook een werkelijk medisch argument naar voren: het openen van pestgraven laat giftige dampen vrij die ziekte verspreiden. In een tijdperk waarin gemeenschappen routinematig lijken opgroeven en vermintten om epidemieën te stoppen, vertegenwoordigt Rohrs volhouden dat deze praktijk contraproductief was een stem van betrekkelijke redelijkheid — en vanuit het perspectief van de moderne epidemiologie had hij in essentie gelijk.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SIGNIFICANCE ═══════════════════════ -->
+<section id="significance">
+  <div class="container">
+
+    <div data-lang="en">
+      <div class="section-label">Historical Significance</div>
+      <h2>Place in Intellectual History</h2>
+      <p>Rohr's dissertation occupies a pivotal position in the long history of European responses to death, disease, and the uncanny. It belongs to a small corpus of 17th-century German academic texts that treated the chewing dead as a legitimate subject of scholarly inquiry, alongside works by authors like Kornmann, Garmann, and Schlüsselburg whom Rohr cites extensively.</p>
+    </div>
+    <div data-lang="nl">
+      <div class="section-label">Historische Betekenis</div>
+      <h2>Plaats in de intellectuele geschiedenis</h2>
+      <p>Rohrs dissertatie neemt een scharnierpositie in binnen de lange geschiedenis van Europese reacties op de dood, ziekte en het onheilspellende. Het behoort tot een klein corpus van 17e-eeuwse Duitse academische teksten die de kauwende doden behandelden als een legitiem onderwerp van wetenschappelijk onderzoek, naast werken van auteurs als Kornmann, Garmann en Schlüsselburg, die Rohr uitvoerig aanhaalt.</p>
+    </div>
+
+    <h3 data-lang="en">Timeline of the Vampire Tradition</h3>
+    <h3 data-lang="nl">Tijdlijn van de vampiertraditie</h3>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">c. 1345</div>
+        <div class="timeline-text" data-lang="en">Earliest case cited by Rohr: a woman in Bohemia found to have chewed her shroud.</div>
+        <div class="timeline-text" data-lang="nl">Vroegste geval aangehaald door Rohr: een vrouw in Bohemen die haar lijkwade bleek te hebben gekauwd.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">1603</div>
+        <div class="timeline-text" data-lang="en">The Nienstadt incident near Hamburg: an exhumed corpse causes further plague deaths.</div>
+        <div class="timeline-text" data-lang="nl">Het Nienstadt-incident nabij Hamburg: een opgegraven lijk veroorzaakt verdere peststerfgevallen.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">1679</div>
+        <div class="timeline-text" data-lang="en"><strong>Rohr presents <em>De Masticatione Mortuorum</em> at Leipzig</strong> — one of the first academic treatments of the phenomenon.</div>
+        <div class="timeline-text" data-lang="nl"><strong>Rohr presenteert <em>De Masticatione Mortuorum</em> in Leipzig</strong> — een van de eerste academische behandelingen van het verschijnsel.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">1725–32</div>
+        <div class="timeline-text" data-lang="en">The word "vampire" enters European languages via Austrian military reports from Serbia (the cases of Peter Plogojowitz and Arnold Paole).</div>
+        <div class="timeline-text" data-lang="nl">Het woord "vampier" komt de Europese talen binnen via Oostenrijkse militaire rapporten uit Servië (de gevallen van Peter Plogojowitz en Arnold Paole).</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">1732</div>
+        <div class="timeline-text" data-lang="en">The "vampire epidemic" in print: dozens of treatises published across Europe debating the reality of vampires.</div>
+        <div class="timeline-text" data-lang="nl">De "vampierenepidemie" in druk: tientallen verhandelingen verschijnen door heel Europa die de werkelijkheid van vampieren bediscussiëren.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">1746</div>
+        <div class="timeline-text" data-lang="en">Dom Augustin Calmet publishes his influential <em>Treatise on the Apparitions of Spirits and on Vampires</em>.</div>
+        <div class="timeline-text" data-lang="nl">Dom Augustin Calmet publiceert zijn invloedrijke <em>Verhandeling over de Verschijningen van Geesten en over Vampieren</em>.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">1819</div>
+        <div class="timeline-text" data-lang="en">John Polidori publishes <em>The Vampyre</em>, the first vampire fiction in English — beginning the literary transformation of folklore into Gothic romance.</div>
+        <div class="timeline-text" data-lang="nl">John Polidori publiceert <em>The Vampyre</em>, het eerste vampierverhaal in het Engels — het begin van de literaire transformatie van folklore naar gotische romantiek.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">1897</div>
+        <div class="timeline-text" data-lang="en">Bram Stoker publishes <em>Dracula</em>, fixing the vampire in the modern imagination.</div>
+        <div class="timeline-text" data-lang="nl">Bram Stoker publiceert <em>Dracula</em>, waarmee de vampier definitief zijn plaats krijgt in de moderne verbeelding.</div>
+      </div>
+    </div>
+
+    <blockquote data-lang="en">
+      Rohr's dissertation reminds us that before the vampire became a literary archetype of seduction and aristocratic menace, it was something far more disturbing and immediate: a dead neighbour, a dead spouse, a dead child, heard grunting and chewing in its coffin while the plague raged through the village above.
+    </blockquote>
+    <blockquote data-lang="nl">
+      Rohrs dissertatie herinnert ons eraan dat voordat de vampier een literair archetype werd van verleiding en aristocratische dreiging, het iets veel verontrustenders en directers was: een dode buurman, een dode echtgenoot, een dood kind, dat knorrend en kauwend in zijn kist werd gehoord terwijl de pest door het dorp erboven raasde.
+    </blockquote>
+
+    <p data-lang="en">The text also reveals the tensions within early modern European thought as it struggled to accommodate folk belief within the frameworks of academic theology and Aristotelian natural philosophy. Rohr's Devil is not a figure of superstition but of systematic theology — an agent whose powers and limitations are carefully circumscribed by divine permission and philosophical logic. In this sense, <em>De Masticatione Mortuorum</em> is as much about the boundaries of knowledge as it is about the chewing dead.</p>
+    <p data-lang="nl">De tekst onthult ook de spanningen binnen het vroegmoderne Europese denken, dat worstelde om volksgeloof in te passen binnen de kaders van academische theologie en Aristotelische natuurfilosofie. Rohrs Duivel is geen figuur van bijgeloof maar van systematische theologie — een kracht wiens vermogens en beperkingen zorgvuldig zijn afgebakend door goddelijke toelating en filosofische logica. In die zin gaat <em>De Masticatione Mortuorum</em> evenzeer over de grenzen van kennis als over de kauwende doden.</p>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+<footer>
+  <div class="container">
+    <p data-lang="en">
+      Translation and analysis based on the digitised text of<br>
+      <em>Dissertatio Historico-Philosophica De Masticatione Mortuorum</em><br>
+      by M. Philippus Rohr, Leipzig, 1679<br>
+      Source: Google Books (public domain)
+    </p>
+    <p data-lang="nl">
+      Vertaling en analyse gebaseerd op de gedigitaliseerde tekst van<br>
+      <em>Dissertatio Historico-Philosophica De Masticatione Mortuorum</em><br>
+      door M. Philippus Rohr, Leipzig, 1679<br>
+      Bron: Google Books (publiek domein)
+    </p>
+    <p style="margin-top: 1rem;" data-lang="en">
+      This page presents a scholarly translation and commentary for educational purposes.
+    </p>
+    <p style="margin-top: 1rem;" data-lang="nl">
+      Deze pagina presenteert een wetenschappelijke vertaling en commentaar voor educatieve doeleinden.
+    </p>
+  </div>
+</footer>
+
+<!-- ═══════════════════ SCRIPTS ═══════════════════ -->
+<script>
+  // Theme switching
+  function toggleTheme() {
+    const isLight = document.body.classList.toggle('light-mode');
+    document.getElementById('theme-icon').textContent = isLight ? '🌙' : '☀️';
+    try { localStorage.setItem('rohr-theme', isLight ? 'light' : 'dark'); } catch(e) {}
+  }
+
+  // Restore saved theme preference
+  try {
+    const savedTheme = localStorage.getItem('rohr-theme');
+    if (savedTheme === 'light') {
+      document.body.classList.add('light-mode');
+      document.getElementById('theme-icon').textContent = '🌙';
+    }
+  } catch(e) {}
+
+  // Language switching
+  function setLang(lang) {
+    document.body.classList.remove('lang-nl');
+    if (lang === 'nl') document.body.classList.add('lang-nl');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-nl').classList.toggle('active', lang === 'nl');
+    document.documentElement.lang = lang;
+    // Persist choice
+    try { localStorage.setItem('rohr-lang', lang); } catch(e) {}
+  }
+
+  // Restore saved language preference
+  try {
+    const saved = localStorage.getItem('rohr-lang');
+    if (saved === 'nl') setLang('nl');
+  } catch(e) {}
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.translation-block, .finding, .argument-item, .context-card, .timeline-item').forEach(el => {
+    el.classList.add('fade-in');
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
